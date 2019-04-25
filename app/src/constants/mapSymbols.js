@@ -1,4 +1,4 @@
-export default Object.freeze({
+const MAP_SYMBOLS = Object.freeze({
     WALL: '#',
     START_UP: '^',
     START_RIGHT: '>',
@@ -6,3 +6,12 @@ export default Object.freeze({
     START_LEFT: '<',
     ROAD: ' ',
 });
+
+export default MAP_SYMBOLS;
+
+export const START_SYMBOLS = new Set([
+    MAP_SYMBOLS.START_DOWN,
+    MAP_SYMBOLS.START_LEFT,
+    MAP_SYMBOLS.START_RIGHT,
+    MAP_SYMBOLS.START_UP,
+]);

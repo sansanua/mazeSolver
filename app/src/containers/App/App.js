@@ -1,38 +1,64 @@
+// https://gist.github.com/krambertech/b4e16509213fb4896fe8b97e86c63b75
+
 import React from 'react';
 import './App.css';
 
 import Graph from 'node-dijkstra';
-
-import MapParser from 'services/mapParser';
+import MapService from 'services/mapService';
+import NavigatorService from 'services/navigatorService';
 
 const getMap = () => {
-    return `#########
-#>#   # #
-#   #   #
-####### #`;
+    return `##### ###################################
+#v    #       #     #         # #   #   #
+##### # ##### # ### # # ##### # # # ### #
+# #   #   #   #   #   # #     #   #   # #
+# # # ### # ########### # ####### # # # #
+#   #   # # #       #   # #   #   # #   #
+####### # # # ##### # ### # # # #########
+#   #     # #     # #   #   # # #       #
+# # ####### ### ### ##### ### # ####### #
+# #             #   #     #   #   #   # #
+# ############### ### ##### ##### # # # #
+#               #     #   #   #   # #   #
+##### ####### # ######### # # # ### #####
+#   # #   #   # #         # # # #       #
+# # # # # # ### # # ####### # # ### ### #
+# # #   # # #     #   #     # #     #   #
+# # ##### # # ####### # ##### ####### # #
+# #     # # # #   # # #     # #       # #
+# ##### ### # ### # # ##### # # ### ### #
+#     #     #     #   #     #   #   #    
+#########################################`;
 };
-// console.log(getMap().split('\n'));
 
 function App() {
-    const route2 = new Graph();
-    route2.addNode('01', { '02': 1, '11': 1 });
-    route2.addNode('02', { '01': 1, '12': 1 });
-    route2.addNode('11', { '01': 1, '12': 1 });
-    route2.addNode('12', { '11': 1, '13': 1, '02': 1, '22': 1 });
-    route2.addNode('13', { '12': 1, '23': 1 });
-    route2.addNode('22', { '12': 1, '23': 1 });
-    route2.addNode('23', { '22': 1, '13': 1 });
+    const mapParser = new MapService(getMap());
+    const dijkstraGraphModel = mapParser.dijkstraGraphModel;
 
-    const res = route2.path('01', '23');
-    console.log(res);
-
-    const mapParser = new MapParser(getMap());
-    const dijkstraGraphModel = mapParser.getDijkstraGraphModel();
+    if (!mapParser.exitPositions.length) {
+        return <div>No Exit</div>;
+    }
 
     const route = new Graph(dijkstraGraphModel);
-    debugger;
-    let a = route.path('2,1', mapParser._exitPositions[0]);
-    console.log(a);
+
+    const availablePaths = [];
+    mapParser.exitPositions.forEach(exit => availablePaths.push(route.path(mapParser.startPosition, exit)));
+
+    const navigatorService = new NavigatorService(availablePaths, mapParser.startDirection);
+
+    let a = route.path(mapParser.startPosition, mapParser.exitPositions[0]);
+
+    const solveMap = [...mapParser.arrayMap];
+    a.forEach(r => {
+        const [ri, ci] = r.split(',');
+
+        solveMap[parseInt(ri)] = solveMap[parseInt(ri)].split('');
+
+        solveMap[parseInt(ri)][parseInt(ci)] = '.';
+        solveMap[parseInt(ri)] = solveMap[parseInt(ri)].join('');
+    });
+    console.log(solveMap);
+
     return <div className="App">{a.join('->')}</div>;
 }
 

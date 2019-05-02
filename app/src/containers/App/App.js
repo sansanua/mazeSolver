@@ -8,7 +8,13 @@ import MapService from 'services/mapService';
 import NavigatorService from 'services/navigatorService';
 
 const getMap = () => {
-    return `##### ###################################
+    return `#########
+  #   # #
+#   #  v#
+#########`;
+};
+const getMap2 = () => {
+    return `#########################################
 #v    #       #     #         # #   #   #
 ##### # ##### # ### # # ##### # # # ### #
 # #   #   #   #   #   # #     #   #   # #
@@ -44,8 +50,6 @@ function App() {
     const availablePaths = [];
     mapParser.exitPositions.forEach(exit => availablePaths.push(route.path(mapParser.startPosition, exit)));
 
-    const navigatorService = new NavigatorService(availablePaths, mapParser.startDirection);
-
     let a = route.path(mapParser.startPosition, mapParser.exitPositions[0]);
 
     const solveMap = [...mapParser.arrayMap];
@@ -58,7 +62,7 @@ function App() {
         solveMap[parseInt(ri)] = solveMap[parseInt(ri)].join('');
     });
     console.log(solveMap);
-
+    const navigatorService = new NavigatorService(availablePaths, mapParser.startDirection);
     return <div className="App">{a.join('->')}</div>;
 }
 

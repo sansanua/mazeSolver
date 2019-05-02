@@ -11,7 +11,7 @@ function createVertex(rowIndex, colIndex) {
  * @returns {Array}
  */
 function parseVertex(vertex) {
-    return vertex.split(',');
+    return vertex ? vertex.split(',') : [null, null];
 }
 
 export { createVertex, parseVertex };

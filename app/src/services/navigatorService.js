@@ -1,17 +1,20 @@
 import { DIRECTIONS } from 'constants/directions';
 import { parseVertex } from 'utils/graphHelper';
-import { revertedTurn, forward } from 'utils/directionsHelper';
+import { revertedTurn, forward, initialRotate, rotateLeft, rotateRight } from 'utils/directionsHelper';
+import TEXTS from 'constants/texts';
+import MAP_SYMBOLS from 'constants/mapSymbols';
 
 const _findTheShortestPath = Symbol('findTheShortestPath');
-const _createTipsForPath = Symbol('createTipsForPath');
+const _createHintsForPath = Symbol('createHintsForPath');
 
 class NavigationService {
     shortestWay = null;
-    shortestWayWithTips = new Map();
+    shortestWayWithHints = new Map();
+    initialRotate = null;
 
     constructor(availablePaths, initialDirection) {
         this[_findTheShortestPath](availablePaths);
-        this[_createTipsForPath](initialDirection);
+        this[_createHintsForPath](initialDirection);
         console.log(this.shortestWay);
     }
 
@@ -29,67 +32,90 @@ class NavigationService {
         );
     }
 
-    [_createTipsForPath](initialDirection) {
+    [_createHintsForPath](initialDirection) {
         let forwardX = 1;
         let forwardY = 1;
-        let _prevRow = null;
-        let _prevColl = null;
+        let prevRowIndex = null;
+        let prevCollIndex = null;
 
-        for (let i = this.shortestWay.length - 1; i >= 0; i--) {
+        const lastIndex = this.shortestWay.length - 1;
+        for (let i = lastIndex; i >= 0; i--) {
             const currentStep = this.shortestWay[i];
-            // console.log(currentStep)
+            const [currRowIndex, currCollIndex] = parseVertex(currentStep);
 
-            const [currRowI, currCollI] = parseVertex(currentStep);
+            if (i === 0) {
+                // start point
+                let expectationDirection = '';
 
-            if (i > 0) {
+                if (currRowIndex !== prevRowIndex) {
+                    expectationDirection = currRowIndex < prevRowIndex ? MAP_SYMBOLS.START_DOWN : MAP_SYMBOLS.START_UP;
+                } else if (currCollIndex !== prevCollIndex) {
+                    expectationDirection =
+                        currCollIndex < prevCollIndex ? MAP_SYMBOLS.START_RIGHT : MAP_SYMBOLS.START_LEFT;
+                }
+
+                const angle = initialRotate(initialDirection, expectationDirection);
+                this.initialRotate = angle;
+
+                if (angle === 0) {
+                    const _forward = forwardY || forwardX || 1;
+                    this.shortestWayWithHints.set(currentStep, forward(_forward));
+                } else {
+                    this.shortestWayWithHints.set(currentStep, angle > 0 ? rotateRight(angle) : rotateLeft(angle));
+                }
+
+                console.log(expectationDirection);
+            } else if (i === lastIndex) {
+                this.shortestWayWithHints.set(currentStep, TEXTS.FINISH);
+            } else {
                 const nextStep = this.shortestWay[i - 1];
-                const [nextRowI, nextCollI] = parseVertex(nextStep);
-                let tip = null;
+                const [nextRowIndex, nextCollIndex] = parseVertex(nextStep);
+                let hint = null;
 
-                if (currRowI !== nextRowI) {
+                if (currRowIndex !== nextRowIndex) {
                     forwardX = 0;
                     if (forwardY) {
-                        tip = forward(forwardY);
+                        hint = forward(forwardY);
                     } else {
-                        if (nextRowI > currRowI) {
-                            tip =
-                                _prevColl < nextCollI
+                        if (nextRowIndex > currRowIndex) {
+                            hint =
+                                prevCollIndex < nextCollIndex
                                     ? revertedTurn(DIRECTIONS.TURN_RIGHT)
                                     : revertedTurn(DIRECTIONS.TURN_LEFT);
                         } else {
-                            tip =
-                                _prevColl > nextCollI
+                            hint =
+                                prevCollIndex > nextCollIndex
                                     ? revertedTurn(DIRECTIONS.TURN_RIGHT)
                                     : revertedTurn(DIRECTIONS.TURN_LEFT);
                         }
                     }
                     forwardY++;
-                } else if (currCollI !== nextCollI) {
+                } else if (currCollIndex !== nextCollIndex) {
                     forwardY = 0;
                     if (forwardX) {
-                        tip = forward(forwardX);
+                        hint = forward(forwardX);
                     } else {
-                        if (nextCollI > currCollI) {
-                            tip =
-                                _prevRow > nextRowI
+                        if (nextCollIndex > currCollIndex) {
+                            hint =
+                                prevRowIndex > nextRowIndex
                                     ? revertedTurn(DIRECTIONS.TURN_RIGHT)
                                     : revertedTurn(DIRECTIONS.TURN_LEFT);
                         } else {
-                            tip =
-                                _prevRow < nextRowI
+                            hint =
+                                prevRowIndex < nextRowIndex
                                     ? revertedTurn(DIRECTIONS.TURN_RIGHT)
                                     : revertedTurn(DIRECTIONS.TURN_LEFT);
                         }
                     }
                     forwardX++;
                 }
-                _prevColl = currCollI;
-                _prevRow = currRowI;
-                // console.log(tip)
-                this.shortestWayWithTips.set(nextStep, tip);
+                prevCollIndex = currCollIndex;
+                prevRowIndex = currRowIndex;
+
+                this.shortestWayWithHints.set(currentStep, hint);
             }
         }
-        console.log(this.shortestWayWithTips);
+        console.log(this.shortestWayWithHints);
     }
 }
 

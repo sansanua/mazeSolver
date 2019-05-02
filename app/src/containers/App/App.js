@@ -9,9 +9,9 @@ import NavigatorService from 'services/navigatorService';
 
 const getMap = () => {
     return `#########
-  #   # #
-#   #  v#
-#########`;
+#^     # #
+##  #   #
+####### #`;
 };
 const getMap2 = () => {
     return `#########################################

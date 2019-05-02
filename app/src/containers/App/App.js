@@ -6,6 +6,10 @@ import './App.css';
 import Graph from 'node-dijkstra';
 import MapService from 'services/mapService';
 import NavigatorService from 'services/navigatorService';
+import MoverService from 'services/moverService';
+
+import MapContainer from 'containers/MapContainer';
+import { parseVertex } from 'utils/graphHelper';
 
 const getMap = () => {
     return `#########
@@ -38,32 +42,35 @@ const getMap2 = () => {
 };
 
 function App() {
-    const mapParser = new MapService(getMap());
+    const mapParser = new MapService(getMap2());
     const dijkstraGraphModel = mapParser.dijkstraGraphModel;
 
     if (!mapParser.exitPositions.length) {
         return <div>No Exit</div>;
     }
 
-    const route = new Graph(dijkstraGraphModel);
-
-    const availablePaths = [];
-    mapParser.exitPositions.forEach(exit => availablePaths.push(route.path(mapParser.startPosition, exit)));
-
-    let a = route.path(mapParser.startPosition, mapParser.exitPositions[0]);
-
-    const solveMap = [...mapParser.arrayMap];
-    a.forEach(r => {
-        const [ri, ci] = r.split(',');
-
-        solveMap[parseInt(ri)] = solveMap[parseInt(ri)].split('');
-
-        solveMap[parseInt(ri)][parseInt(ci)] = '.';
-        solveMap[parseInt(ri)] = solveMap[parseInt(ri)].join('');
-    });
-    console.log(solveMap);
+    const graph = new Graph(dijkstraGraphModel);
+    const availablePaths = mapParser.exitPositions.map(exit =>
+        graph.path(mapParser.startPosition, exit)
+    );
     const navigatorService = new NavigatorService(availablePaths, mapParser.startDirection);
-    return <div className="App">{a.join('->')}</div>;
+    const path = navigatorService.shortestPath.map(p => parseVertex(p));
+    const mover = new MoverService(path);
+    const currentPositionObserve = mover.getCurrentPositionObservable();
+
+    // currentPositionObserve.subscribe(val => console.log(val));
+
+    console.log(mapParser);
+
+    return (
+        <div className="App">
+            <MapContainer
+                map={mapParser.arrayMap}
+                path={path}
+                currentPositionObserve={currentPositionObserve}
+            />
+        </div>
+    );
 }
 
 export default App;

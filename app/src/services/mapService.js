@@ -71,7 +71,8 @@ class MapService {
     }
 
     [_getMapPresentedInArrayFormat]() {
-        this.arrayMap = this.originMap.split('\n');
+        const _map = this.originMap.split('\n');
+        this.arrayMap = _map.map(r => r.split(''));
         this.mapWidth = this.arrayMap[0].length;
         this.mapHeight = this.arrayMap.length;
     }

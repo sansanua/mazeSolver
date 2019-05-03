@@ -1,7 +1,7 @@
 import { from, of } from 'rxjs';
 import { delay, concatMap } from 'rxjs/operators';
 
-const INTERVAL = 1000;
+const INTERVAL = 10000;
 
 class MoverService {
     _path = null;

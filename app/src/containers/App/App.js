@@ -1,7 +1,7 @@
 // https://gist.github.com/krambertech/b4e16509213fb4896fe8b97e86c63b75
 
 import React from 'react';
-import './App.css';
+import './App.scss';
 
 import Graph from 'node-dijkstra';
 import MapService from 'services/mapService';
@@ -9,6 +9,7 @@ import NavigatorService from 'services/navigatorService';
 import MoverService from 'services/moverService';
 
 import MapContainer from 'containers/MapContainer';
+import HintContainer from 'containers/HintContainer';
 import { parseVertex } from 'utils/graphHelper';
 
 const getMap = () => {
@@ -64,11 +65,20 @@ function App() {
 
     return (
         <div className="App">
-            <MapContainer
-                map={mapParser.arrayMap}
-                path={path}
-                currentPositionObserve={currentPositionObserve}
-            />
+            <div className="hint">
+                <HintContainer
+                    hints={navigatorService.shortestPathWithHints}
+                    path={path}
+                    currentPositionObserve={currentPositionObserve}
+                />
+            </div>
+            <div className="map">
+                <MapContainer
+                    map={mapParser.arrayMap}
+                    path={path}
+                    currentPositionObserve={currentPositionObserve}
+                />
+            </div>
         </div>
     );
 }

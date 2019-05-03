@@ -21,24 +21,34 @@ function initMap(ctx, map) {
 
 function drawPath(ctx, path) {
     path.forEach(p => {
-        const [rowIndex, collIndex] = p;
-        drawRect(ctx, collIndex, rowIndex, '#ff00ff');
+        const [row, coll] = p;
+        drawRect(ctx, coll, row, '#ff00ff');
     });
 }
 
+function drawCurrentPosition(ctx, x, y) {
+    drawRect(ctx, x, y, '#00ffff');
+}
+
+function draw(ctx, map, path, currentPosition) {
+    initMap(ctx, map);
+    drawPath(ctx, path);
+
+    if (currentPosition) {
+        const [row, coll] = currentPosition;
+        drawCurrentPosition(ctx, coll, row);
+    }
+}
+
 export default function MapContainer({ map, path, currentPositionObserve }) {
-    const canvas = useRef(null);
+    const $canvas = useRef(null);
 
     useEffect(() => {
-        if (canvas.current.getContext) {
-            var ctx = canvas.current.getContext('2d');
-
-            initMap(ctx, map);
-            drawPath(ctx, path);
-
+        if ($canvas.current.getContext) {
+            var ctx = $canvas.current.getContext('2d');
+            draw(ctx, map, path);
             currentPositionObserve.subscribe(currentPosition => {
-                const [y, x] = currentPosition;
-                drawRect(ctx, x, y, '#00ffff');
+                draw(ctx, map, path, currentPosition);
             });
         }
         return () => {};
@@ -46,7 +56,7 @@ export default function MapContainer({ map, path, currentPositionObserve }) {
 
     return (
         <div>
-            <canvas ref={canvas} width="500" height="500">
+            <canvas ref={$canvas} width="500" height="500">
                 Извините, ваш браузер нет поддерживает&lt;canvas&gt; элемент.
             </canvas>
         </div>

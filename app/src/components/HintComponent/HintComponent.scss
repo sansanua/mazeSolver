@@ -1,0 +1,17 @@
+.hintComponent {
+    .list {
+        height: 80vh;
+        overflow: hidden;
+    }
+
+    .selected {
+        color: red;
+    }
+
+    .item {
+        margin-bottom: 10px;
+        background-color: white;
+        border-radius: 5px;
+        height: 50px;
+    }
+}

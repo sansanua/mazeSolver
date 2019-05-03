@@ -127,6 +127,7 @@ class NavigationService {
                 this.shortestPathWithHints.set(currentStep, hint);
             }
         }
+
         console.log(this.shortestPathWithHints);
     }
 }

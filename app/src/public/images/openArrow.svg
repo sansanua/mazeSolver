@@ -1,0 +1,7 @@
+<?xml version="1.0" ?><!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'><svg height="512px" style="enable-background:new 0 0 512 512;" version="1.1" viewBox="0 0 512 512" width="512px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><style type="text/css">
+<![CDATA[
+	.st0{display:inline;}
+	.st1{fill:none;stroke:#000000;stroke-width:16;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	.st2{display:none;}
+]]>
+</style><g class="st2" id="layer"><g class="st0"><polyline class="st1" points="411,256 260,407 411,256 260,105   "/><polyline class="st1" points="252,256 101,407 252,256 101,105   "/></g></g><g id="layer_copy"><g><path d="M260,415c-2.048,0-4.095-0.781-5.657-2.343C252.781,411.095,252,409.048,252,407s0.781-4.095,2.343-5.657L399.687,256    L254.343,110.657c-3.125-3.124-3.125-8.189,0-11.313c3.124-3.124,8.189-3.124,11.314,0l151,151    c1.562,1.562,2.343,3.609,2.343,5.657c0,2.048-0.781,4.095-2.343,5.657l-151,151C264.095,414.219,262.048,415,260,415z"/></g><g><path d="M101,415c-2.047,0-4.095-0.781-5.657-2.343C93.781,411.095,93,409.048,93,407s0.781-4.095,2.343-5.657L240.686,256    L95.343,110.657c-3.125-3.124-3.125-8.189,0-11.313c3.124-3.124,8.189-3.124,11.313,0l151,151    c1.562,1.562,2.343,3.609,2.343,5.657c0,2.048-0.781,4.095-2.343,5.657l-151,151C105.095,414.219,103.047,415,101,415z"/></g></g></svg>

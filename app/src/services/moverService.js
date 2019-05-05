@@ -1,7 +1,7 @@
 import { from, of } from 'rxjs';
-import { delay, concatMap } from 'rxjs/operators';
+import { delay, concatMap, pairwise } from 'rxjs/operators';
 
-const INTERVAL = 10000;
+const INTERVAL = 1000;
 
 class MoverService {
     _path = null;
@@ -11,7 +11,10 @@ class MoverService {
     }
 
     getCurrentPositionObservable() {
-        return from(this._path).pipe(concatMap(val => of(val).pipe(delay(INTERVAL))));
+        return from(this._path).pipe(
+            concatMap(val => of(val).pipe(delay(INTERVAL))),
+            pairwise()
+        );
     }
 }
 

@@ -1,0 +1,50 @@
+$sideCloseWidth: 80px;
+$sideOpenWidth: 370px;
+
+.mazeContainer {
+    text-align: center;
+    background-color: #222831;
+    height: 100vh;
+    font-size: calc(10px + 2vmin);
+    color: black;
+
+    .mazeWrapper {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+
+        .mazeMainContent {
+            flex: 1;
+        }
+    }
+
+    .mazeMainContent {
+        width: calc(100% - #{$sideCloseWidth});
+        &.sideOpen {
+            width: calc(100% - #{$sideOpenWidth});
+        }
+    }
+
+    .map {
+        overflow: auto;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 20px;
+        height: 100%;
+    }
+
+    .rip {
+        display: flex;
+        justify-content: center;
+        height: 100%;
+        align-items: center;
+        flex-direction: column;
+
+        img {
+            width: 300px;
+        }
+    }
+}

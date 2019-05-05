@@ -1,0 +1,21 @@
+$padding: 10px;
+$iconHeight: 56px;
+
+.sidePanel {
+    background-color: #364050;
+    padding: 10px;
+    padding-top: 0;
+    min-width: 67px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .openButton {
+        display: flex;
+        justify-content: flex-end;
+    }
+    .contentContainer {
+        height: calc(100vh - (#{$padding}) - (#{$iconHeight}));
+    }
+}

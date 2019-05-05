@@ -6,8 +6,8 @@ import {
     initialRotate,
     rotateLeft,
     rotateRight,
+    finish,
 } from 'utils/directionsHelper';
-import TEXTS from 'constants/texts';
 import MAP_SYMBOLS from 'constants/mapSymbols';
 
 const _findTheShortestPath = Symbol('findTheShortestPath');
@@ -21,7 +21,6 @@ class NavigationService {
     constructor(availablePaths, initialDirection) {
         this[_findTheShortestPath](availablePaths);
         this[_createHintsForPath](initialDirection);
-        console.log(this.shortestPath);
     }
 
     [_findTheShortestPath](availablePaths) {
@@ -78,7 +77,7 @@ class NavigationService {
 
                 console.log(expectationDirection);
             } else if (i === lastIndex) {
-                this.shortestPathWithHints.set(currentStep, TEXTS.FINISH);
+                this.shortestPathWithHints.set(currentStep, finish());
             } else {
                 const nextStep = this.shortestPath[i - 1];
                 const [nextRowIndex, nextCollIndex] = parseVertex(nextStep);
@@ -127,8 +126,6 @@ class NavigationService {
                 this.shortestPathWithHints.set(currentStep, hint);
             }
         }
-
-        console.log(this.shortestPathWithHints);
     }
 }
 

@@ -1,12 +1,12 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import HintItem from './HintItem';
 
-export default ({ path, hints, currentPosition, className }) => {
+export default ({ path, hints, currentPosition, className, initialRotate, startDirection }) => {
     const $list = useRef(null);
-    // useEffect(() => {}, []);
+
     const onScrollItemToTop = $item => {
         $list.current.scrollTo({
-            top: $item.current.offsetTop,
+            top: $item.current.offsetTop - 3,
             behavior: 'smooth',
         });
     };
@@ -14,13 +14,16 @@ export default ({ path, hints, currentPosition, className }) => {
         <div className={className} ref={$list}>
             {path.map(point => {
                 return (
-                    <HintItem
-                        key={point}
-                        point={point}
-                        hints={hints}
-                        currentPosition={currentPosition}
-                        onScrollItemToTop={onScrollItemToTop}
-                    />
+                    <div key={point}>
+                        <HintItem
+                            point={point}
+                            hints={hints}
+                            currentPosition={currentPosition}
+                            onScrollItemToTop={onScrollItemToTop}
+                            initialRotate={initialRotate}
+                            startDirection={startDirection}
+                        />
+                    </div>
                 );
             })}
         </div>

@@ -1,30 +1,44 @@
 import React, { useRef } from 'react';
 import { DIRECTIONS } from 'constants/directions';
+import { getText } from 'utils/textHelper';
+
+import { Left, Right, Up, Rotate, Finish } from 'components/common/Icons';
 
 const icons = {
-    [DIRECTIONS.FORWARD_X]: 'F',
-    [DIRECTIONS.TURN_LEFT]: 'L',
-    [DIRECTIONS.TURN_RIGHT]: 'R',
-    [DIRECTIONS.TURN_LEFT_X_DEGREES]: 'RL',
-    [DIRECTIONS.TURN_RIGHT_X_DEGREES]: 'RR',
+    [DIRECTIONS.FORWARD_X]: () => <Up />,
+    [DIRECTIONS.TURN_LEFT]: () => <Left />,
+    [DIRECTIONS.TURN_RIGHT]: () => <Right />,
+    [DIRECTIONS.TURN_LEFT_X_DEGREES]: (rotate, startDirection) => (
+        <Rotate startDirection={startDirection} rotate={rotate} />
+    ),
+    [DIRECTIONS.TURN_RIGHT_X_DEGREES]: (rotate, startDirection) => (
+        <Rotate startDirection={startDirection} rotate={rotate} />
+    ),
+    [DIRECTIONS.FINISH]: () => <Finish />,
 };
 
-export default ({ key, hints, point, currentPosition, onScrollItemToTop }) => {
+export default function HintItem({
+    hints,
+    point,
+    currentPosition,
+    onScrollItemToTop,
+    initialRotate,
+    startDirection,
+}) {
     const $item = useRef(null);
     const isSelected = currentPosition === point;
     const hint = hints.get(point);
     const icon = icons[hint.action];
+    const text = getText(hint);
 
     if (isSelected && $item.current) {
-        console.log($item.current);
         onScrollItemToTop($item);
     }
-    // debugger;
 
     return (
-        <div key={key} ref={$item} className={['item', isSelected ? 'selected' : ''].join(' ')}>
-            <span>{icon}</span>
-            <span>{hint.action}</span>
+        <div ref={$item} className={['item', isSelected ? 'selected' : ''].join(' ')}>
+            <span className="arrow">{icon(initialRotate, startDirection)}</span>
+            <span className="text">{text}</span>
         </div>
     );
-};
+}
